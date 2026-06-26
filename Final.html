@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parth Goswami | Solar PV Design Engineer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Poppins', sans-serif; background: #050505; color: #fff; overflow-x: hidden; }
+        
+        header { position: fixed; top: 0; left: 0; width: 100%; padding: 20px 80px; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); z-index: 999; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .logo { font-size: 20px; font-weight: 800; color: #4ade80; letter-spacing: 1px; }
+        nav a { color: #fff; text-decoration: none; margin-left: 25px; font-weight: 500; transition: 0.3s; }
+        nav a:hover { color: #4ade80; }
+
+        .section { min-height: 100vh; position: relative; display: flex; align-items: center; padding: 100px 10%; background-size: cover; background-position: center; background-repeat: no-repeat; }
+        .section::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(5,5,5,0.95) 40%, rgba(5,5,5,0.6) 100%); }
+        .content { position: relative; z-index: 2; max-width: 650px; }
+        .content h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: 1.2; margin-bottom: 20px; }
+        .content p { font-size: 1.1rem; line-height: 1.8; color: #ccc; margin-bottom: 30px; }
+
+        .processing-container { position: relative; z-index: 2; margin-left: auto; width: 100%; max-width: 450px; background: rgba(15, 15, 15, 0.85); border: 1px solid rgba(74, 222, 128, 0.2); border-radius: 12px; padding: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); backdrop-filter: blur(10px); }
+        .processing-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        .status-dot { width: 10px; height: 10px; background: #4ade80; border-radius: 50%; display: inline-block; animation: blink 1.5s infinite; }
+        .processing-terminal { font-family: monospace; font-size: 0.9rem; color: #a7f3d0; background: #000; padding: 15px; border-radius: 6px; height: 150px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; }
+        .terminal-line { opacity: 0; transform: translateY(10px); animation: fadeInUp 0.6s ease forwards; margin-bottom: 6px; }
+        .terminal-line:nth-child(1) { animation-delay: 0.2s; }
+        .terminal-line:nth-child(2) { animation-delay: 0.8s; }
+        .terminal-line:nth-child(3) { animation-delay: 1.4s; }
+        .progress-bar { width: 100%; height: 6px; background: #222; border-radius: 3px; margin-top: 15px; overflow: hidden; }
+        .progress-fill { height: 100%; background: #4ade80; width: 0; animation: loadProgress 4s infinite linear; }
+
+        .btn { display: inline-block; padding: 15px 35px; background: #4ade80; color: #000; font-weight: 700; text-decoration: none; border-radius: 8px; transition: 0.3s; }
+        .btn:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(74, 222, 128, 0.2); }
+
+        #hero { background-image: url('https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1920&q=80'); }
+        #design { background-image: url('https://images.unsplash.com/photo-1600132806370-bf17e65e942f?auto=format&fit=crop&w=1920&q=80'); }
+        #pvsyst { background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1920&q=80'); }
+        #projects-hero { background-image: url('https://images.unsplash.com/photo-1613665813446-82a78c468a1d?auto=format&fit=crop&w=1920&q=80'); }
+
+        .stats { padding: 80px 10%; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 25px; background: #0d0d0d; }
+        .stat-card { background: #111; padding: 35px; border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .stat-card h2 { font-size: 2.4rem; color: #4ade80; }
+        .stat-card p { margin-top: 10px; color: #ccc; }
+
+        .services, .gallery-section { padding: 100px 10%; background: #080808; }
+        .services h2, .gallery-section h2 { text-align: center; font-size: 2.8rem; margin-bottom: 50px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .card { background: #111; padding: 30px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
+        .card:hover { transform: translateY(-8px); }
+        .card h3 { color: #4ade80; margin-bottom: 15px; }
+
+        .drone-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+        .drone-card { background: #111; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.4s ease; }
+        .drone-card:hover { transform: translateY(-10px); }
+        .image-wrapper { position: relative; height: 240px; overflow: hidden; }
+        .image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .drone-card:hover .image-wrapper img { transform: scale(1.08); }
+        .drone-badge { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.75); color: #4ade80; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; border: 1px solid #4ade80; z-index: 10; }
+        .drone-info { padding: 20px; }
+        .drone-info h3 { margin-bottom: 8px; font-size: 1.25rem; }
+        .drone-info p { color: #aaa; font-size: 0.95rem; line-height: 1.5; }
+
+        .contact { padding: 100px 10%; background: #0d0d0d; text-align: center; }
+        footer { padding: 40px; text-align: center; background: #000; color: #888; border-top: 1px solid rgba(255,255,255,0.05); }
+
+        @keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+        @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes loadProgress { 0% { width: 0%; } 80% { width: 100%; } 100% { width: 100%; } }
+
+        @media(max-width:992px) { .section { flex-direction: column; justify-content: center; text-align: center; gap: 50px; } .processing-container { margin: 0 auto; } }
+        @media(max-width:768px) { header { padding: 15px; flex-direction: column; } nav { margin-top: 15px; } nav a { margin: 0 8px; font-size: 14px; } }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">PARTH GOSWAMI</div>
+    <nav>
+        <a href="#hero">Home</a>
+        <a href="#about">About</a>
+        <a href="#design">Design</a>
+        <a href="#pvsyst">PVsyst</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+    </nav>
+</header>
+
+<section id="hero" class="section">
+    <div class="content">
+        <h1>Solar PV Design Engineer</h1>
+        <p>With over 2+ years of professional experience specializing in Utility Scale and Ground-Mounted Solar PV System Design. Competent in layout optimization, precision drafting, shadow mitigation, and bankable generation performance reporting.</p>
+        <a href="#contact" class="btn">Contact Me</a>
+    </div>
+</section>
+
+<section id="about" class="services">
+    <h2>About Me</h2>
+    <div class="grid">
+        <div class="card">
+            <h3>Professional Profile</h3>
+            <p>A proactive Solar PV Design Engineer with 2+ years of hands-on expertise engineering high-yield solar infrastructure. Proven ability to guide complex solar assets through rigorous planning, layout optimization, and engineering phases.</p>
+        </div>
+        <div class="card">
+            <h3>Core Skills</h3>
+            <p>• Ground-Mounted Solar PV Design<br>• Layout Optimization<br>• String Sizing & Inverter Config<br>• Shadow Analysis<br>• AutoCAD & SketchUp<br>• Project Management</p>
+        </div>
+    </div>
+</section>
+
+<section class="stats">
+    <div class="stat-card"><h2>2+ Years</h2><p>Experience</p></div>
+    <div class="stat-card"><h2>52 MW</h2><p>Portfolio</p></div>
+    <div class="stat-card"><h2>25 MW</h2><p>Commissioned</p></div>
+</section>
+
+<section id="design" class="section">
+    <div class="content">
+        <h1>AutoCAD & Solar Design</h1>
+        <p>Developing engineering packages with optimized multi-row string plans, electrical layouts, cable pathways, system load math, and precise 2D equipment spatial mappings.</p>
+    </div>
+    <div class="processing-container">
+        <div class="processing-header">
+            <span>AutoCAD DWG Engine</span>
+            <div><span class="status-dot"></span> <small style="color:#aaa">RUNNING</small></div>
+        </div>
+        <div class="processing-terminal">
+            <div class="terminal-line">&gt; Initializing Tracker Matrix...</div>
+            <div class="terminal-line">&gt; Mapping Cable Routing...</div>
+            <div class="terminal-line" style="color:#4ade80">&gt; Exporting DWG Architecture...</div>
+        </div>
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+    </div>
+</section>
+
+<section id="pvsyst" class="section">
+    <div class="content">
+        <h1>PVsyst Simulation</h1>
+        <p>Delivering detailed energy forecasts, complete loss diagrams, IAM evaluations, and optimized DC/AC ratio configurations to structure bankable production models.</p>
+    </div>
+    <div class="processing-container">
+        <div class="processing-header">
+            <span>PVsyst Meteo Core</span>
+            <div><span class="status-dot" style="background:#3b82f6"></span> <small style="color:#aaa">RUNNING</small></div>
+        </div>
+        <div class="processing-terminal">
+            <div class="terminal-line">&gt; Loading Meteo Data...</div>
+            <div class="terminal-line">&gt; Computing Shading Scene...</div>
+            <div class="terminal-line" style="color:#3b82f6">&gt; Compiling Loss Diagram...</div>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="background:#3b82f6"></div></div>
+    </div>
+</section>
+
+<section id="projects-hero" class="section">
+    <div class="content">
+        <h1>Projects & EPC</h1>
+        <p>Bridging conceptual blueprints with real-world infrastructure. Overseeing complete project lifecycles including strategic site optimization, hardware layout, and grid synchronization.</p>
+    </div>
+</section>
+
+<section id="projects" class="gallery-section">
+    <h2>Completed Plant Overviews</h2>
+    <div class="drone-grid">
+        <div class="drone-card">
+            <div class="image-wrapper">
+                <span class="drone-badge">Utility Array</span>
+                <img src="https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&w=800&q=80" alt="Solar">
+            </div>
+            <div class="drone-info">
+                <h3>Ground-Mounted Arrays</h3>
+                <p>Aerial view mapping high-density block configurations and structural integrity.</p>
+            </div>
+        </div>
+        <div class="drone-card">
+            <div class="image-wrapper">
+                <span class="drone-badge">Substation</span>
+                <img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=800&q=80" alt="Substation">
+            </div>
+            <div class="drone-info">
+                <h3>EPC & Substation</h3>
+                <p>System overview linking structural architectures into high voltage collectors.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="contact" class="contact">
+    <h2>Contact Me</h2>
+    <p><strong>Parth Goswami</strong></p>
+    <p>Solar PV Design Engineer</p>
+    <p style="margin-top: 20px;">📧 pg629825@gmail.com</p>
+    <p>📞 +91 7567416542</p>
+    <p>📍 Gujarat, India</p>
+</section>
+
+<footer>
+    © 2026 Parth Goswami | Solar PV Design Engineer
+</footer>
+
+</body>
+</html>
